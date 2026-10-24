@@ -1,0 +1,19 @@
+name: Sync to Gitee
+on:
+  push:
+    branches: [ main ]
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Sync to Gitee
+        uses: wei/git-sync@v3
+        with:
+          source_repo: ${{ github.repository }}
+          source_branch: ${{ github.ref_name }}
+          dest_repo: gitee.com/lorenzo_l/test-repository.git
+          dest_branch: ${{ github.ref_name }}
+          dest_ssh_key: ${{ secrets.GITEE_PRIVATE_KEY }}
