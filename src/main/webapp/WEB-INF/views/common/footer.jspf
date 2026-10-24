@@ -1,0 +1,6 @@
+        </main>
+    </div>
+</div>
+<script src="${ctx}/static/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

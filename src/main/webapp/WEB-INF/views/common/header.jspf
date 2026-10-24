@@ -1,0 +1,45 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${pageTitle} · 学生成绩管理系统</title>
+    <link rel="stylesheet" href="${ctx}/static/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${ctx}/static/css/app.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="${ctx}/home">学生成绩管理系统</a>
+        <div class="d-flex align-items-center text-white">
+            <span class="me-3">${sessionScope.LOGIN_USER.realName}（${sessionScope.LOGIN_USER.roleName}）</span>
+            <a class="btn btn-outline-light btn-sm" href="${ctx}/logout">退出登录</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link ${navActive eq 'home' ? 'active' : ''}" href="${ctx}/home">系统首页</a>
+                </li>
+                <c:forEach var="m" items="${sessionScope.LOGIN_USER.menus}">
+                    <li class="nav-item">
+                        <a class="nav-link ${navActive eq m.permCode ? 'active' : ''}"
+                           href="${ctx}${m.url}">${m.permName}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+
+        <main class="col-md-10 ms-sm-auto px-md-4 pt-4">
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger py-2">${error}</div>
+            </c:if>
+            <c:if test="${not empty message}">
+                <div class="alert alert-success py-2">${message}</div>
+            </c:if>
