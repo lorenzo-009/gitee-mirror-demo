@@ -2,18 +2,27 @@ name: Sync to Gitee
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+
 jobs:
-  sync:
+  mirror:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Sync to Gitee
-        uses: wei/git-sync@v3
-        with:
-          source_repo: ${{ github.repository }}
-          source_branch: ${{ github.ref_name }}
-          destination_repo: gitee.com/lorenzo_l/test-repository.git
-          destination_branch: ${{ github.ref_name }}
-          ssh_private_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+
+      - name: Setup SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan gitee.com >> ~/.ssh/known_hosts
+
+      - name: Push mirror to Gitee
+        run: |
+          git remote add gitee git@gitee.com:lorenzo_l/test-repository.git || true
+          git push gitee main --force
